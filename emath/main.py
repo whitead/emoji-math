@@ -3,6 +3,8 @@ import numpy as np
 import re
 import click
 import sys
+import os
+import urllib.request
 
 def prefix_emojis(expr):
     regrex_pattern = re.compile(pattern = "["
@@ -13,13 +15,31 @@ def prefix_emojis(expr):
                            "]+", flags = re.UNICODE)
     return re.sub(regrex_pattern, lambda x: f'emoji2vec["{x.group(0)}"]', expr)
 
+def get_data():
+    loc = os.path.join(os.path.expanduser("~"), '.emoji_embeddings')
+    try:
+        data = pd.read_csv(loc, skiprows=1, delimiter=' ')
+    except FileNotFoundError:
+        print('FIRST USE ONLY: Downloading weights and will store in', loc)
+        url = 'https://raw.githubusercontent.com/uclnlp/emoji2vec/master/pre-trained/emoji2vec.txt'
+        urllib.request.urlretrieve(url, loc)
+        license_loc = os.path.join(os.path.expanduser("~"), '.emoji_embeddings_LICENSE')
+        url = 'https://raw.githubusercontent.com/uclnlp/emoji2vec/master/LICENSE'
+        urllib.request.urlretrieve(url, license_loc)
+        print('Please read and cite Eisner, Ben, et al. "emoji2vec: Learning emoji representations from their description." arXiv preprint arXiv:1609.08359 (2016).')
+        data = pd.read_csv(loc, skiprows=1, delimiter=' ')
+    return data
+
+
+
+
 @click.command()
 @click.argument('expr', nargs=-1)
 def app(expr):
     if len(expr) == 0:
         print('Give me some emojis please')
         return
-    data = pd.read_csv('https://raw.githubusercontent.com/uclnlp/emoji2vec/master/pre-trained/emoji2vec.txt', skiprows=1, delimiter=' ')
+    data = get_data()
     # normalize them
     data.iloc[:,1:-1] /= np.linalg.norm(data.iloc[:,1:-1].values, axis=0)
     my_vars = dict()
