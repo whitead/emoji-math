@@ -21,12 +21,12 @@ def app(expr):
     data.iloc[:,1:-1] /= np.linalg.norm(data.iloc[:,1:-1].values, axis=0)
     my_vars = dict()
     for i in range(len(data)):
-        my_vars[data.iloc[i,0]] = data.iloc[i,1:-1].values
+        my_vars[data.iloc[i,0]] = data.iloc[i,1:-1].values.astype(float)
     #prefix emojis because python reasons
     expr = ' '.join(expr)
     prefixed_expr = prefix_emojis(expr)
     my_locals = {}
-    exec('result = ' + prefixed_expr, {'emoji2vec': my_vars}, my_locals)
+    exec('import numpy as np; result = ' + prefixed_expr, {'emoji2vec': my_vars}, my_locals)
     try:
         result = my_locals['result']
     except Exception as e:

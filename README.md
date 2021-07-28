@@ -9,6 +9,9 @@ pip install emath@git+git://github.com/whitead/emoji-math.git
 
 ## Usage
 
+`emoji-math` computes the given python expression and returns either the value or the nearest
+5 emojis as measured by cosine similarity.
+
 ```sh
 $ emoji-math 👑 - 🚹 + 🚺
 👑 - 🚹 + 🚺 =
@@ -22,6 +25,15 @@ $ emoji-math 👑 - 🚹 + 🚺
 ```sh
 $ emoji-math 🚹 @ 🚺
 🚹 @ 🚺 = 0.32784234338655205
+```
+
+``sh
+np.sin(🏰) =
+0 🏰
+1 🏯
+2 👸
+3 👳
+4 🎩
 ```
 
 ## Credit
