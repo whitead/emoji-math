@@ -16,6 +16,9 @@ def prefix_emojis(expr):
 @click.command()
 @click.argument('expr', nargs=-1)
 def app(expr):
+    if len(expr) == 0:
+        print('Give me some emojis please')
+        return
     data = pd.read_csv('https://raw.githubusercontent.com/uclnlp/emoji2vec/master/pre-trained/emoji2vec.txt', skiprows=1, delimiter=' ')
     # normalize them
     data.iloc[:,1:-1] /= np.linalg.norm(data.iloc[:,1:-1].values, axis=0)
@@ -26,8 +29,8 @@ def app(expr):
     expr = ' '.join(expr)
     prefixed_expr = prefix_emojis(expr)
     my_locals = {}
-    exec('import numpy as np; result = ' + prefixed_expr, {'emoji2vec': my_vars}, my_locals)
     try:
+        exec('import numpy as np; result = ' + prefixed_expr, {'emoji2vec': my_vars}, my_locals)
         result = my_locals['result']
     except Exception as e:
         print('Failed with')

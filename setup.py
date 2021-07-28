@@ -25,7 +25,7 @@ setup(
     description='Emoji Mathematics',
     long_description=read('README.md'),
 
-    packages=find_packages(),
+    packages=['emath'],
 
     install_requires=['numpy', 'pandas', 'click'],
 
