@@ -6,14 +6,13 @@ import sys
 import os
 import urllib.request
 
-def prefix_emojis(expr):
-    regrex_pattern = re.compile(pattern = "["
-        u"\U0001F600-\U0001F64F"  # emoticons
-        u"\U0001F300-\U0001F5FF"  # symbols & pictographs
-        u"\U0001F680-\U0001F6FF"  # transport & map symbols
-        u"\U0001F1E0-\U0001F1FF"  # flags (iOS)
-                           "]+", flags = re.UNICODE)
-    return re.sub(regrex_pattern, lambda x: f'emoji2vec["{x.group(0)}"]', expr)
+
+def prefix_emojis(expr, emoji_list):
+    expr_s = list(expr)
+    for i in range(len(expr_s)):
+        if expr_s[i] in emoji_list:
+            expr_s[i] = f'emoji2vec["{expr_s[i]}"]'
+    return ' '.join(expr_s)
 
 def get_data():
     loc = os.path.join(os.path.expanduser("~"), '.emoji_embeddings')
@@ -35,11 +34,17 @@ def get_data():
 
 @click.command()
 @click.argument('expr', nargs=-1)
-def app(expr):
-    if len(expr) == 0:
+@click.option('--supported/', default=False, is_flag=True)
+def app(expr, supported):
+    if len(expr) == 0 and not supported:
         print('Give me some emojis please')
         return
     data = get_data()
+    emojis = set(data.iloc[:,0].values)
+    if supported:
+        print('Here are all emojis supported')
+        print(emojis)
+        return
     # normalize them
     data.iloc[:,1:-1] /= np.linalg.norm(data.iloc[:,1:-1].values, axis=0)
     my_vars = dict()
@@ -47,7 +52,7 @@ def app(expr):
         my_vars[data.iloc[i,0]] = data.iloc[i,1:-1].values.astype(float)
     #prefix emojis because python reasons
     expr = ' '.join(expr)
-    prefixed_expr = prefix_emojis(expr)
+    prefixed_expr = prefix_emojis(expr, emojis)
     my_locals = {}
     try:
         exec('import numpy as np; result = ' + prefixed_expr, {'emoji2vec': my_vars}, my_locals)
@@ -55,7 +60,10 @@ def app(expr):
     except Exception as e:
         print('Failed with')
         print(prefixed_expr)
-        raise e
+        if type(e) is SyntaxError:
+            raise ValueError('Unsupported emoji in "' + prefixed_expr + '"')
+        else:
+            raise e
     if type(result) == np.ndarray and result.shape == (300,):
         print(expr + ' = ')
         # cosine similarity

@@ -13,7 +13,7 @@ pip install emath@git+git://github.com/whitead/emoji-math.git
 5 emojis as measured by cosine similarity.
 
 ```sh
-$ emoji-math 👑 - 🚹 + 🚺
+>emoji-math 👑 - 🚹 + 🚺
 👑 - 🚹 + 🚺 =
 0 👑
 1 👸
@@ -23,11 +23,12 @@ $ emoji-math 👑 - 🚹 + 🚺
 ```
 
 ```sh
-$ emoji-math 🚹 @ 🚺
+>emoji-math 🚹 @ 🚺
 🚹 @ 🚺 = 0.32784234338655205
 ```
 
 ```sh
+>emoji-math np.sin(🏰)
 np.sin(🏰) =
 0 🏰
 1 🏯
