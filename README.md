@@ -37,6 +37,10 @@ np.sin(🏰) =
 4 🎩
 ```
 
+## Google Colab
+
+Start using emoji math with [Google Colab]((https://colab.research.google.com/github/whitead/emoji-math/blob/master/colab/EmojiMath.ipynb))
+
 ## Credit
 
 Made [@andrewwhite01](https://twitter.com/andrewwhite01)
