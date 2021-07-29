@@ -49,7 +49,7 @@ def emoji2vec_dict(data):
     return emoji2vec
 
 
-def topk_emojis(v, data, k=5):
+def topk_emojis(v, data, k=3):
     '''topk vectors via cosine'''
     v = norm(v)
     diff = -np.dot(data.iloc[:, 1:-1].values, v)
@@ -79,25 +79,26 @@ def exec_emojis(expr, data=None, emojis=None):
 
 
 def format_result(result, data, prefix='', exclude=set()):
-    str_result = [prefix]
+    str_result = []
     if type(result) == np.ndarray and result.shape == (300,):
+        str_result.append('Best Matches:')
         # cosine similarity
         topk = topk_emojis(result, data)
         # try to find new emoji
         # this code is sketchy. Hope it works!
-        index = 0
+        index = 1
         for e in topk:
             if e not in exclude:
-                str_result.append(f'{index}. {e}')
+                str_result.append(f'  {prefix}{e}')
                 index += 1
                 del topk[topk.index(e)]
                 break
         # now print the rest
         for e in topk:
-            str_result.append(f'{index}. {e}')
+            str_result.append(f'  {prefix}{e}')
             index += 1
     else:
-        str_result.append(str(result))
+        str_result = [f'{prefix}{result}']
     return '\n'.join(str_result)
 
 
