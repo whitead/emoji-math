@@ -7,6 +7,13 @@ import os
 import urllib.request
 
 
+def norm(v):
+    n = np.linalg.norm(v)
+    if n > 0:
+        return v / n
+    return v
+
+
 def prefix_emojis(expr, emoji_list):
     expr_s = list(expr)
     for i in range(len(expr_s)):
@@ -44,7 +51,7 @@ def emoji2vec_dict(data):
 
 def topk_emojis(v, data, k=5):
     '''topk vectors via cosine'''
-    v /= np.linalg.norm(v)
+    v = norm(v)
     diff = -np.dot(data.iloc[:, 1:-1].values, v)
     si = np.argsort(diff)
     result = [data.iloc[si[i], 0] for i in range(k)]
@@ -71,13 +78,24 @@ def exec_emojis(expr, data=None, emojis=None):
     return result
 
 
-def format_result(result, data, prefix=''):
+def format_result(result, data, prefix='', exclude=set()):
     str_result = [prefix]
     if type(result) == np.ndarray and result.shape == (300,):
         # cosine similarity
         topk = topk_emojis(result, data)
-        for i, e in enumerate(topk):
-            str_result.append(f'{i}. {e}')
+        # try to find new emoji
+        # this code is sketchy. Hope it works!
+        index = 0
+        for e in topk:
+            if e not in exclude:
+                str_result.append(f'{index}. {e}')
+                index += 1
+                del topk[topk.index(e)]
+                break
+        # now print the rest
+        for e in topk:
+            str_result.append(f'{index}. {e}')
+            index += 1
     else:
         str_result.append(str(result))
     return '\n'.join(str_result)
@@ -97,7 +115,7 @@ def app(expr, supported):
         return
     expr = ''.join(expr)
     result = exec_emojis(expr, data, emojis)
-    message = format_result(result, data, expr + ' = ')
+    message = format_result(result, data, expr + ' = ', exclude=expr)
     print(message)
 
 
