@@ -14,12 +14,10 @@ pip install emath@git+git://github.com/whitead/emoji-math.git
 
 ```sh
 >emoji-math 👑 - 🚹 + 🚺
-👑 - 🚹 + 🚺 =
-0 👑
-1 👸
-2 🏰
-3 🎎
-4 💂
+Best Matches:
+  👑-🚹+🚺 = 👸
+  👑-🚹+🚺 = 👑
+  👑-🚹+🚺 = 🤴
 ```
 
 ```sh
@@ -29,12 +27,18 @@ pip install emath@git+git://github.com/whitead/emoji-math.git
 
 ```sh
 >emoji-math np.sin(🏰)
-np.sin(🏰) =
-0 🏰
-1 🏯
-2 👸
-3 👳
-4 🎩
+Best Matches:
+  np.sin(🏰) = 🏯
+  np.sin(🏰) = 🏰
+  np.sin(🏰) = 👸
+```
+
+```sh
+>emoji-math 🚹 + 🚺
+Best Matches:
+  🚹+🚺 = 🚻
+  🚹+🚺 = 🚺
+  🚹+🚺 = 🚹
 ```
 
 ## Google Colab

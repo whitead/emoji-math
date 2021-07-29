@@ -49,10 +49,13 @@ def emoji2vec_dict(data):
     return emoji2vec
 
 
-def topk_emojis(v, data, k=3):
+def topk_emojis(v, data, k=3, cosine=False):
     '''topk vectors via cosine'''
     v = norm(v)
-    diff = -np.dot(data.iloc[:, 1:-1].values, v)
+    if cosine:
+        diff = -np.dot(data.iloc[:, 1:-1].values, v)
+    else:
+        diff = np.sum((data.iloc[:, 1:-1] - v)**2, axis=1)
     si = np.argsort(diff)
     result = [data.iloc[si[i], 0] for i in range(k)]
     return result
