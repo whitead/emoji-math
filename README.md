@@ -47,7 +47,7 @@ Start using emoji math with [Google Colab](https://colab.research.google.com/git
 
 ## Credit
 
-Made [@andrewwhite01](https://twitter.com/andrewwhite01)
+Made by [@andrewwhite01](https://twitter.com/andrewwhite01)
 
 Vector embeddings from [emoji2vec](https://github.com/uclnlp/emoji2vec) as described in
 
