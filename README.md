@@ -1,6 +1,6 @@
 # Emoji Math
 
-Because why not?
+Because why not? I put a minimal effort into this project, so please have low expectations. 
 
 
 ```sh
