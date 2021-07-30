@@ -1,4 +1,4 @@
-from emath.main import prefix_emojis
+from emath.main import format_result, prefix_emojis
 import emath
 
 
@@ -19,4 +19,5 @@ def test_exec_emojis():
 
 def test_cosine():
     data, emojis = emath.get_data(normed = False)
-    result = emath.exec_emojis('👑 - 🚹 + 🚺', data, emojis, cosine=True)
+    result = emath.exec_emojis('👑 - 🚹 + 🚺', data, emojis)
+    format_result = emath.format_result(result, data, cosine=True)
