@@ -15,7 +15,7 @@ def read(filename):
 
 setup(
     name='emath',
-    version='1.5',
+    version='1.6',
     url='https://github.com/whitead/emoji-math',
     license='MIT',
 

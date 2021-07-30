@@ -1,6 +1,7 @@
 # Emoji Math
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/whitead/emoji-math/blob/master/colab/EmojiMath.ipynb)
 
-Because why not? I put a minimal effort into this project, so please have low expectations. 
+Because why not? I put a minimal effort into this project, so please have low expectations.
 
 
 ```sh
@@ -41,9 +42,23 @@ Best Matches:
   🚹+🚺 = 🚹
 ```
 
+## Options
+
+You can choose between using the Euclidean distance or cosine similarity for reporting results. Cosine works better for
+multiplication/division because it only cares about direction. Default is Euclidean.
+
+```sh
+>emoji-math --cosine 🚹 + 🚺
+Best Matches:
+  🚹+🚺 = 👚
+  🚹+🚺 = 🚺
+  🚹+🚺 = 🚹
+
+
 ## Google Colab
 
-Start using emoji math with [Google Colab](https://colab.research.google.com/github/whitead/emoji-math/blob/master/colab/EmojiMath.ipynb)
+
+Start using emoji math with [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/whitead/emoji-math/blob/master/colab/EmojiMath.ipynb)
 
 ## Credit
 
