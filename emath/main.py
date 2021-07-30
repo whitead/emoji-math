@@ -22,7 +22,7 @@ def prefix_emojis(expr, emoji_list):
     return ''.join(expr_s)
 
 
-def get_data():
+def get_data(normed=True):
     loc = os.path.join(os.path.expanduser("~"), '.emoji_embeddings')
     try:
         data = pd.read_csv(loc, skiprows=1, delimiter=' ')
@@ -37,7 +37,8 @@ def get_data():
         print('Please read and cite Eisner, Ben, et al. "emoji2vec: Learning emoji representations from their description." arXiv preprint arXiv:1609.08359 (2016).')
         data = pd.read_csv(loc, skiprows=1, delimiter=' ')
     # normalize emoji vectors
-    data.iloc[:, 1:-1] /= np.linalg.norm(data.iloc[:, 1:-1].values, axis=0)
+    if normed:
+        data.iloc[:, 1:-1] /= np.linalg.norm(data.iloc[:, 1:-1].values, axis=0)
     emojis = set(data.iloc[:, 0].values)
     return data, emojis
 
@@ -51,7 +52,6 @@ def emoji2vec_dict(data):
 
 def topk_emojis(v, data, k=3, cosine=False):
     '''topk vectors via cosine'''
-    v = norm(v)
     if cosine:
         diff = -np.dot(data.iloc[:, 1:-1].values, v)
     else:
@@ -81,12 +81,17 @@ def exec_emojis(expr, data=None, emojis=None):
     return result
 
 
-def format_result(result, data, prefix='', exclude=set()):
+def format_result(result, data, prefix='', exclude=set(), cosine=False):
     str_result = []
     if type(result) == np.ndarray and result.shape == (300,):
         str_result.append('Best Matches:')
         # cosine similarity
-        topk = topk_emojis(result, data)
+        if cosine:
+            topk = topk_emojis(result, data, cosine=cosine)
+        else:
+            result = norm(result)
+            topk = topk_emojis(result, data)
+
         # try to find new emoji
         # this code is sketchy. Hope it works!
         index = 1
@@ -107,19 +112,20 @@ def format_result(result, data, prefix='', exclude=set()):
 
 @click.command()
 @click.argument('expr', nargs=-1)
+@click.option('--cosine/', default=False, is_flag=True)
 @click.option('--supported/', default=False, is_flag=True)
-def app(expr, supported):
+def app(expr, cosine, supported):
     if len(expr) == 0 and not supported:
         print('Give me some emojis please')
         return
-    data, emojis = get_data()
+    data, emojis = get_data(normed=not cosine)
     if supported:
         print('Here are all emojis supported')
         print(emojis)
         return
     expr = ''.join(expr)
     result = exec_emojis(expr, data, emojis)
-    message = format_result(result, data, expr + ' = ', exclude=expr)
+    message = format_result(result, data, expr + ' = ', exclude=expr, cosine=cosine)
     print(message)
 
 

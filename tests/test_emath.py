@@ -16,3 +16,7 @@ def test_exec_emojis():
     result = emath.exec_emojis('🚹 @ 🚺', data, emojis)
     result = emath.exec_emojis('np.sin(🏰)', data, emojis)
     result = emath.exec_emojis('🚹**2', data, emojis)
+
+def test_cosine():
+    data, emojis = emath.get_data(normed = False)
+    result = emath.exec_emojis('👑 - 🚹 + 🚺', data, emojis, cosine=True)
