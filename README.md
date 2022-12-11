@@ -5,7 +5,7 @@ Because why not? I put a minimal effort into this project, so please have low ex
 
 
 ```sh
-pip install emath@git+git://github.com/whitead/emoji-math.git
+pip install emath@https://github.com/whitead/emoji-math/archive/refs/heads/main.zip
 ```
 
 ## Usage
